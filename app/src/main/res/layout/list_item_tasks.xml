@@ -9,6 +9,7 @@
     android:layout_margin="2dp">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/listBackground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
@@ -48,6 +49,15 @@
             android:text="Desc"
             android:textSize="20sp" />
         <TextView
+            android:id="@+id/tvCategory"
+            android:fontFamily="@font/bell"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textColor="#000"
+            android:text="Desc"
+            android:textSize="45sp" />
+        <TextView
             android:id="@+id/tvTime"
             android:fontFamily="sans-serif-smallcaps"
             android:layout_width="match_parent"
@@ -56,6 +66,7 @@
             android:textColor="#000"
             android:text="Desc"
             android:textSize="20sp" />
+
 
     </LinearLayout>
 </LinearLayout>

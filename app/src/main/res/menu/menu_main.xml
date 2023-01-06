@@ -14,4 +14,10 @@
         android:title="Add Task"
         app:showAsAction="never"
         android:icon="@drawable/ic_add"/>
+    <item
+        android:id="@+id/actionSearch"
+        android:icon="@drawable/ic_baseline_search_24"
+        android:title="Search"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView" />
 </menu>

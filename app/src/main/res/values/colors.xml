@@ -5,4 +5,9 @@
     <color name="colorAccent">#fd7f01</color>
     <color name="colorSuccess">#FFC107</color>
     <color name="colorUnSuccess">#fd2b01</color>
+    <color name="violate">#803c94</color>
+    <color name="yellow">#EDE20F</color>
+    <color name="orange">#F88B17</color>
+    <color name="red">#BF0F0F</color>
+
 </resources>

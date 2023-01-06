@@ -13,7 +13,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
 
     override fun onCreate(db: SQLiteDatabase) {
         val createTable =
-            "CREATE TABLE $TABLE_NAME ($ID INTEGER PRIMARY KEY, $NAME TEXT,$DESC TEXT,$COMPLETED TEXT,$DEVELOPER TEXT,$TIME TEXT);"
+            "CREATE TABLE $TABLE_NAME ($ID INTEGER PRIMARY KEY, $NAME TEXT,$DESC TEXT,$COMPLETED TEXT,$DEVELOPER TEXT,$TIME TEXT,$CATEGORY INTEGER);"
         db.execSQL(createTable)
     }
 
@@ -31,6 +31,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         values.put(COMPLETED, tasks.completed)
         values.put(DEVELOPER,tasks.developer)
         values.put(TIME,tasks.time)
+        values.put(CATEGORY,tasks.catagory)
         val success = db.insert(TABLE_NAME, null, values)
 //        db.close()
         Log.v("InsertedId", "$success")
@@ -50,6 +51,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         taskObj.completed = cursor.getString(cursor.getColumnIndex(COMPLETED))
         taskObj.developer = cursor.getString((cursor.getColumnIndex(DEVELOPER)))
         taskObj.time = cursor.getString((cursor.getColumnIndex(TIME)))
+        taskObj.catagory = Integer.parseInt(cursor.getString(cursor.getColumnIndex(CATEGORY)))
         cursor.close()
         db.close()
         return taskObj
@@ -59,7 +61,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
     fun getAllTasks(): List<Tasks> {
         val taskList = ArrayList<Tasks>()
         val db = writableDatabase
-        val selectQuery = "SELECT  * FROM $TABLE_NAME"
+        val selectQuery = "SELECT  * FROM $TABLE_NAME ORDER BY $COMPLETED, $CATEGORY DESC"
         val cursor = db.rawQuery(selectQuery, null)
         if (cursor != null) {
             if (cursor.moveToFirst()) {
@@ -71,6 +73,8 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
                     tasks.completed = cursor.getString(cursor.getColumnIndex(COMPLETED))
                     tasks.developer = cursor.getString(cursor.getColumnIndex(DEVELOPER))
                     tasks.time = cursor.getString(cursor.getColumnIndex(TIME))
+                    tasks.catagory = Integer.parseInt(cursor.getString(cursor.getColumnIndex(
+                        CATEGORY)))
                     taskList.add(tasks)
                 } while (cursor.moveToNext())
             }
@@ -88,6 +92,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         values.put(COMPLETED, tasks.completed)
         values.put(DEVELOPER,tasks.developer)
         values.put(TIME,tasks.time)
+        values.put(CATEGORY,tasks.catagory)
         val success = db.update(TABLE_NAME, values, "$ID=?", arrayOf(tasks.id.toString())).toLong()
         db.close()
         return Integer.parseInt("$success") != -1
@@ -108,7 +113,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
     }
 
     companion object {
-        private const val DB_VERSION = 3
+        private const val DB_VERSION = 5
         private const val DB_NAME = "MyTasks"
         private const val TABLE_NAME = "Tasks"
         private const val ID = "Id"
@@ -117,5 +122,6 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         private const val COMPLETED = "Completed"
         private const val DEVELOPER = "Developer"
         private const val TIME = "Time"
+        private const val CATEGORY = "Category"
     }
 }

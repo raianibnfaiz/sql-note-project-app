@@ -8,5 +8,6 @@ class Tasks {
     var completed: String = "N"
     var developer: String = "Faiz"
     var time: String = "Time"
+    var catagory: Int = 0
 
 }

@@ -7,9 +7,11 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import com.example.sqlitekotlinexample.adapter.TaskRecyclerAdapter
 import com.example.sqlitekotlinexample.db.DatabaseHandler
 import com.example.sqlitekotlinexample.models.Tasks
@@ -56,10 +58,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
+
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.action_delete) {
@@ -80,7 +82,37 @@ class MainActivity : AppCompatActivity() {
             i.putExtra("Mode", "A")
             startActivity(i)
         }
+        if(id == R.id.actionSearch){
+            val searchItem: MenuItem = item
+            val searchView: SearchView = searchItem.actionView as SearchView
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+                android.widget.SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(p0: String?): Boolean {
+                    return false
+                }
+                override fun onQueryTextChange(msg: String): Boolean {
+                    filter(msg)
+                    return false
+                }
+            })
+            initDB()
+        }
+
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun filter(text: String) {
+        val filteredlist: MutableList<Tasks> = ArrayList()
+        for (item in listTasks) {
+            if (item.name.toLowerCase().contains(text.toLowerCase()) ) {
+                filteredlist.add(item)
+            }
+        }
+        if (filteredlist.isEmpty()) {
+            Toast.makeText(this, "No Data Found..", Toast.LENGTH_SHORT).show()
+        } else {
+            taskRecyclerAdapter?.filterList(filteredlist)
+        }
     }
 
     override fun onResume() {
